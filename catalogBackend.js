@@ -53,7 +53,7 @@ function returnAlbum(opts){
 
 app.get('/search/:album', (req, res) => {
     const album_name = req.params['album']; //or req.params.id
-    lastfm.albumSearch({q: album_name, limit = 1}, (err, data) => {
+    lastfm.albumSearch({q: album_name, limit: 1}, (err, data) => {
         if (err) res.status(404).send(err);
         else 
             res.send(data)
