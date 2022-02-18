@@ -4,7 +4,6 @@ const port = 5000;
 const cors = require("cors");
 
 app.use(cors());
-
 app.use(express.json());
 
 var lastfm_data = {
@@ -18,21 +17,16 @@ const lastfm = new LastFM(lastfm_data.apiKey, {
   userAgent: "MyApp/1.0.0 (http://example.com)",
 });
 
-var opts = {
-  q: "nevermind nirvana",
-  limit: "1",
-};
-
-function returnAlbum(opts) {
-  lastfm.albumSearch(opts, (err, data) => {
-    if (err) console.error(err);
-    else return data;
-  });
-}
-
-// app.get('/', (req, res) => {
-//     res.send(users);
-// });
+app.get("/:user", (req, res) => {
+  const user_name = req.params["user"];
+  try {
+    const result = await userServices.findUserByUserName(user_name);
+    res.send({ users_list: result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("User does not exist.");
+  }
+});
 
 // app.get('/users', (req, res) => {
 //     const name = req.query.name;
@@ -66,6 +60,13 @@ app.get("/search/artist/:artist", (req, res) => {
     if (err) res.status(404).send(err);
     else res.send(data);
   });
+});
+
+app.post("/users", async (req, res) => {
+  const user = req.body;
+  const savedUser = await userServices.addUser(user);
+  if (savedUser) res.status(201).send(savedUser);
+  else res.status(500).end();
 });
 
 app.listen(port, () => {
