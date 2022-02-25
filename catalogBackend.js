@@ -3,6 +3,8 @@ const app = express();
 const port = 5000;
 const cors = require("cors");
 
+const userServices = require("./models/user-services");
+
 app.use(cors());
 app.use(express.json());
 
@@ -20,31 +22,13 @@ const lastfm = new LastFM(lastfm_data.apiKey, {
 app.get("/:user", (req, res) => {
   const user_name = req.params["user"];
   try {
-    const result = await userServices.findUserByUserName(user_name);
+    const result = userServices.findUserByUserName(user_name);
     res.send({ users_list: result });
   } catch (error) {
     console.log(error);
     res.status(500).send("User does not exist.");
   }
 });
-
-// app.get('/users', (req, res) => {
-//     const name = req.query.name;
-//     const job = req.query.job;
-//     if ((name != undefined) && (job != undefined)){
-//         let result = findUserByNameandJob(name, job);
-//         result = {users_list: result};
-//         res.send(result);
-//     }
-//     else if (name != undefined){
-//         let result = findUserByName(name);
-//         result = {users_list: result};
-//         res.send(result);
-//     }
-//     else{
-//         res.send(users);
-//     }
-// });
 
 app.get("/search/album/:album", (req, res) => {
   const album_name = req.params["album"]; //or req.params.id
@@ -62,7 +46,7 @@ app.get("/search/artist/:artist", (req, res) => {
   });
 });
 
-app.post("/users", async (req, res) => {
+app.post("/user", async (req, res) => {
   const user = req.body;
   const savedUser = await userServices.addUser(user);
   if (savedUser) res.status(201).send(savedUser);
