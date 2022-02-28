@@ -12,7 +12,6 @@ const UserSchema = new mongoose.Schema(
     },
     bio: {
       type: String,
-      required: true,
       trim: true,
     },
     albums: {

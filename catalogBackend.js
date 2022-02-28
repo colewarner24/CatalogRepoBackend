@@ -19,19 +19,18 @@ const lastfm = new LastFM(lastfm_data.apiKey, {
   userAgent: "MyApp/1.0.0 (http://example.com)",
 });
 
-app.get("/:user", (req, res) => {
+app.get("/:user", async (req, res) => {
   const user_name = req.params["user"];
-  try {
-    const result = userServices.findUserByUserName(user_name);
-    res.send({ users_list: result });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("User does not exist.");
-  }
+  const result = await userServices.findUserByUserName(user_name);
+  if (result === undefined || result === null)
+        res.status(404).send('Resource not found.');
+    else {
+        res.send(result);
+    }
 });
 
 app.get("/search/album/:album", (req, res) => {
-  const album_name = req.params["album"]; //or req.params.id
+  const album_name = req.params["album"];
   lastfm.albumSearch({ q: album_name, limit: 1 }, (err, data) => {
     if (err) res.status(404).send(err);
     else res.send(data);
@@ -39,7 +38,7 @@ app.get("/search/album/:album", (req, res) => {
 });
 
 app.get("/search/artist/:artist", (req, res) => {
-  const artist_name = req.params["artist"]; //or req.params.id
+  const artist_name = req.params["artist"];
   lastfm.artistSearch({ q: artist_name, limit: 1 }, (err, data) => {
     if (err) res.status(404).send(err);
     else res.send(data);

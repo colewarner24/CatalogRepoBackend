@@ -17,12 +17,15 @@ function getDbConnection() {
 
 async function findUserByUserName(username) {
   const userModel = getDbConnection().model("User", UserSchema);
-  try {
-    return await userModel.find({ username: username });
-  } catch (error) {
-    console.log(error);
-    return undefined;
-  }
+  const result = await userModel.find({'username':username});
+  console.log(result);
+  return result;
+  //   try {
+
+  //   } catch (error) {
+  //     console.log(error);
+  //     return undefined;
+  //   }
 }
 
 async function addUser(user) {
