@@ -17,8 +17,7 @@ function getDbConnection() {
 
 async function findUserByUserName(username) {
   const userModel = getDbConnection().model("User", UserSchema);
-  const result = await userModel.find({'username':username});
-  console.log(result);
+  const result = await userModel.find({ username: username });
   return result;
   //   try {
 
@@ -39,6 +38,20 @@ async function addUser(user) {
     return false;
   }
 }
+
+async function addReview(review) {
+  const userModel = getDbConnection().model("User", UserSchema);
+  const username = review["username"];
+  try{
+    userModel.update({"username" : username}, { $push: {reviews: review}}, done);
+    return True
+  }
+  catch (error) {
+      console.log(error)
+      return False
+  }};
+
+
 
 exports.addUser = addUser;
 exports.findUserByUserName = findUserByUserName;
