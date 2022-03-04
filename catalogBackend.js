@@ -2,22 +2,34 @@ const express = require("express");
 const app = express();
 const port = 5000;
 const cors = require("cors");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const userServices = require("./models/user-services");
+
+var SpotifyWebApi = require('spotify-web-api-node');
 
 app.use(cors());
 app.use(express.json());
 
-var lastfm_data = {
-  apiKey: "0be6331638837e7fea170d7a7ab72e63",
-  apiSecret: "63f18939ea38fe857f20023a073b48f7",
-  name: "cole24777",
-};
-
-const LastFM = require("last-fm");
-const lastfm = new LastFM(lastfm_data.apiKey, {
-  userAgent: "MyApp/1.0.0 (http://example.com)",
+var spotifyApi = new SpotifyWebApi({
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET
 });
+
+// Retrieve an access token.
+spotifyApi.clientCredentialsGrant().then(
+  function(data) {
+    console.log('The access token expires in ' + data.body['expires_in']);
+    console.log('The access token is ' + data.body['access_token']);
+
+    // Save the access token so that it's used in future calls
+    spotifyApi.setAccessToken(data.body['access_token']);
+  },
+  function(err) {
+    console.log('Something went wrong when retrieving an access token', err);
+  }
+);
 
 app.get("/:user", async (req, res) => {
   const user_name = req.params["user"];
@@ -29,21 +41,30 @@ app.get("/:user", async (req, res) => {
     res.status(200).send(result);
   }});
 
-app.get("/search/album/:album", (req, res) => {
-  const album_name = req.params["album"];
-  lastfm.albumSearch({ q: album_name, limit: 1 }, (err, data) => {
-    if (err) res.status(404).send(err);
-    else res.send(data);
+  app.get("/search/album/:album", async (req, res) => {
+    const album_name = req.params["album"];
+    spotifyApi.searchAlbums(`album:${album_name}`).then(
+      function(data) {
+        res.send(data.body)
+      },
+      function(err) {
+        res.status(404).send(err)
+      }
+    );
   });
-});
-
-app.get("/search/artist/:artist", (req, res) => {
-  const artist_name = req.params["artist"];
-  lastfm.artistSearch({ q: artist_name, limit: 1 }, (err, data) => {
-    if (err) res.status(404).send(err);
-    else res.send(data);
+  
+  
+  app.get("/search/artist/:artist", (req, res) => {
+    const artist_name = req.params["artist"];
+    spotifyApi.searchArtists(`artist:${artist_name}`).then(
+      function(data) {
+        res.send(data.body)
+      },
+      function(err) {
+        res.status(404).send(err)
+      }
+    );
   });
-});
 
 app.post("/user", async (req, res) => {
   const user = req.body;
