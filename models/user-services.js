@@ -39,19 +39,32 @@ async function addUser(user) {
   }
 }
 
+async function getAlbum(album_name) {
+  return spotifyApi.searchAlbums(`album:${album_name}`);
+}
+
+async function getArtist(artist_name) {
+  return spotifyApi.searchArtists(`artist:${artist_name}`);
+}
+
 async function addReview(review) {
   const userModel = getDbConnection().model("User", UserSchema);
   const username = review["username"];
-  try{
-    userModel.update({"username" : username}, { $push: {reviews: review}}, done);
-    return True
+  try {
+    userModel.update(
+      { username: username },
+      { $push: { reviews: review } },
+      done
+    );
+    return True;
+  } catch (error) {
+    console.log(error);
+    return False;
   }
-  catch (error) {
-      console.log(error)
-      return False
-  }};
-
-
+}
 
 exports.addUser = addUser;
 exports.findUserByUserName = findUserByUserName;
+exports.addReview = addReview;
+exports.getAlbum = getAlbum;
+exports.getArtist = getArtist;
