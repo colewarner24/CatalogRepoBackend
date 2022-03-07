@@ -44,21 +44,21 @@ app.get("/:user", async (req, res) => {
 
 app.get("/search/album/:album", async (req, res) => {
   const album_name = req.params["album"];
-  const data = userServices.getArtist(album_name);
+  const data = await userServices.getAlbum(album_name);
   if (data === undefined) {
     res.status(404).send(err);
   } else {
-    res.send(data);
+    res.send(data.body);
   }
 });
 
-app.get("/search/artist/:artist", (req, res) => {
+app.get("/search/artist/:artist", async (req, res) => {
   const artist_name = req.params["artist"];
-  const data = userServices.getArtist(artist_name);
+  const data = await userServices.getArtist(artist_name);
   if (data === undefined) {
     res.status(404).send(err);
   } else {
-    res.send(data);
+    res.send(data.body);
   }
 });
 
