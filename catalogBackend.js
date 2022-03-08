@@ -31,7 +31,7 @@ spotifyApi.clientCredentialsGrant().then(
   }
 );
 
-app.get("/:user", async (req, res) => {
+app.get("/user/:user", async (req, res) => {
   const user_name = req.params["user"];
   const result = await userServices.findUserByUserName(user_name);
   if (result === undefined || result === null || result.length === 0) {
