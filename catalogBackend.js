@@ -75,13 +75,9 @@ app.post("/user", async (req, res) => {
 
 app.post("/reviews", async (req, res) => {
   const review = req.body;
-  //   const user_name = user["username"];
-  //   const find_user = await userServices.findUserByUserName(user_name);
-  //   if (find_user === undefined || find_user === null) {
   const success = await userServices.addReview(review);
   if (success) res.status(201).send(success);
   else res.status(500).end();
-  //   } else res.status(500).end();
 });
 
 app.listen(port, () => {

@@ -71,10 +71,9 @@ async function addReview(review) {
   const userModel = getDbConnection().model("User", UserSchema);
   const username = review.username;
   try {
-    userModel.update(
+    await userModel.updateOne(
       { username: username },
-      { $push: { reviews: review } },
-      done
+      { $push: { reviews: review } }
     );
     return true;
   } catch (error) {
