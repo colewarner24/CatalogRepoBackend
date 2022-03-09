@@ -103,9 +103,29 @@ test("Adding a user and then pushing a review", async () => {
   expect(saved_user.reviews.length).toBe(0);
   const review_data = await userServices.addReview(review1);
   const getuser = await userServices.findUserByUserName(user.username);
-  console.log(getuser[0]);
   expect(getuser[0].reviews.length).toBe(1);
   expect(getuser[0].reviews[0].text).toBe(review1.text);
+});
+
+test("Finding a non existant user", async () => {
+  const saved_user = await userServices.findUserByUserName("sgagfsgsd");
+  expect(saved_user).toEqual([]);
+});
+
+test("Adding a duplicate user", async () => {
+  const user1 = {
+    username: "a new test",
+    bio: "here is my bio",
+    profile_pic_url: "dasgg",
+    albums: ["Album1", "Album2", "Album3"],
+    artists: ["Artist 1", "Artist 2"],
+    reviews: [],
+  };
+
+  const saved_user1 = await userServices.addUser(user1);
+  const saved_user2 = await userServices.addUser(user1);
+  expect(saved_user1.username).toBe("a new test");
+  expect(saved_user2).toBe(false);
 });
 
 afterAll(async () => {
