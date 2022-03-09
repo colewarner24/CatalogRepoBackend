@@ -26,6 +26,11 @@ spotifyApi.clientCredentialsGrant().then(
   }
 );
 
+function setConnection(newConn) {
+  dbConnection = newConn;
+  return dbConnection;
+}
+
 function getDbConnection() {
   if (!dbConnection) {
     dbConnection = mongoose.createConnection(process.env.MONGODB_URI, {
@@ -40,12 +45,6 @@ async function findUserByUserName(username) {
   const userModel = getDbConnection().model("User", UserSchema);
   const result = await userModel.find({ username: username });
   return result;
-  //   try {
-
-  //   } catch (error) {
-  //     console.log(error);
-  //     return undefined;
-  //   }
 }
 
 async function addUser(user) {
@@ -70,17 +69,17 @@ async function getArtist(artist_name) {
 
 async function addReview(review) {
   const userModel = getDbConnection().model("User", UserSchema);
-  const username = review["username"];
+  const username = review.username;
   try {
     userModel.update(
       { username: username },
       { $push: { reviews: review } },
       done
     );
-    return True;
+    return true;
   } catch (error) {
     console.log(error);
-    return False;
+    return false;
   }
 }
 
@@ -89,3 +88,4 @@ exports.findUserByUserName = findUserByUserName;
 exports.addReview = addReview;
 exports.getAlbum = getAlbum;
 exports.getArtist = getArtist;
+exports.setConnection = setConnection;
