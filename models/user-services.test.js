@@ -23,6 +23,7 @@ beforeAll(async () => {
   userServices.setConnection(conn);
 });
 
+// tests passed inconsistently
 // test("Searching up an album on Spotify API", async () => {
 //   const albumName = "Blonde";
 //   const album = await userServices.getAlbum(albumName);
@@ -92,7 +93,6 @@ test("Adding a user and then pushing a review", async () => {
     artists: ["Artist 1", "Artist 2"],
     reviews: [],
   };
-
   const review1 = {
     username: "iwantreview",
     album: "Blonde",
@@ -126,6 +126,17 @@ test("Adding a duplicate user", async () => {
   const saved_user2 = await userServices.addUser(user1);
   expect(saved_user1.username).toBe("a new test");
   expect(saved_user2).toBe(false);
+});
+
+test("posting an invalid review", async () => {
+  const review2 = {
+    username: "this is fake accjdsaj;gjsount",
+    album: "Blonde",
+    text: "God this is good",
+  };
+
+  const review_data = await userServices.addReview(review2);
+  expect(review_data).toBe(false);
 });
 
 afterAll(async () => {

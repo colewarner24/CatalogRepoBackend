@@ -15,8 +15,8 @@ var spotifyApi = new SpotifyWebApi({
 // Retrieve an access token.
 spotifyApi.clientCredentialsGrant().then(
   function (data) {
-    console.log("The access token expires in " + data.body["expires_in"]);
-    console.log("The access token is " + data.body["access_token"]);
+    //console.log("The access token expires in " + data.body["expires_in"]);
+    //console.log("The access token is " + data.body["access_token"]);
 
     // Save the access token so that it's used in future calls
     spotifyApi.setAccessToken(data.body["access_token"]);
@@ -51,7 +51,7 @@ async function addUser(user) {
   const userModel = getDbConnection().model("User", UserSchema);
   const userCheck = await findUserByUserName(user.username);
   if (userCheck.length != 0) {
-    console.log("Already a user with username", user.username);
+    console.log("Already a user with username:", user.username);
     return false;
   }
   try {
@@ -75,16 +75,13 @@ async function getArtist(artist_name) {
 async function addReview(review) {
   const userModel = getDbConnection().model("User", UserSchema);
   const username = review.username;
-  try {
+  if ((await findUserByUserName(username)).length != 0) {
     await userModel.updateOne(
       { username: username },
       { $push: { reviews: review } }
     );
     return true;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
+  } else return false;
 }
 
 exports.addUser = addUser;

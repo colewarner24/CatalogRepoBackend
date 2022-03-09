@@ -7,29 +7,8 @@ dotenv.config();
 
 const userServices = require("./models/user-services");
 
-var SpotifyWebApi = require("spotify-web-api-node");
-
 app.use(cors());
 app.use(express.json());
-
-var spotifyApi = new SpotifyWebApi({
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-});
-
-// Retrieve an access token.
-spotifyApi.clientCredentialsGrant().then(
-  function (data) {
-    console.log("The access token expires in " + data.body["expires_in"]);
-    console.log("The access token is " + data.body["access_token"]);
-
-    // Save the access token so that it's used in future calls
-    spotifyApi.setAccessToken(data.body["access_token"]);
-  },
-  function (err) {
-    console.log("Something went wrong when retrieving an access token", err);
-  }
-);
 
 app.get("/user/:user", async (req, res) => {
   const user_name = req.params["user"];
@@ -64,13 +43,9 @@ app.get("/search/artist/:artist", async (req, res) => {
 
 app.post("/user", async (req, res) => {
   const user = req.body;
-  //   const user_name = user["username"];
-  //   const find_user = await userServices.findUserByUserName(user_name);
-  //   if (find_user === undefined || find_user === null) {
   const savedUser = await userServices.addUser(user);
   if (savedUser) res.status(201).send(savedUser);
   else res.status(500).end();
-  //   } else res.status(500).end();
 });
 
 app.post("/reviews", async (req, res) => {
