@@ -15,6 +15,48 @@ const testingpass = [];
 app.use(cors());
 app.use(express.json());
 
+app.post("/testinglogin", async (req, res) => {
+  const username = req.body.username;
+  const pwd = req.body.pwd;
+  const retrievedUser = fakeUser;
+  if (retrievedUser.username && retrievedUser.pwd) {
+    const isValid = await bcrypt.compare(pwd, retrievedUser.pwd);
+    if (isValid) {
+      // Generate token and respond
+      const token = generateAccessToken(username);
+      res.status(200).send(token);
+    } else {
+      //Unauthorized due to invalid pwd
+      res.status(401).send("Unauthorized");
+    }
+  } else {
+    //Unauthorized due to invalid username
+    res.status(401).send("Unauthorized");
+  }
+}); 
+
+app.post("/testingsignup", async (req, res) => {
+  const username = req.body.username;
+  const email = req.body.email;
+  const userPwd = req.body.pwd; 
+  if (!username && !pwd && !email) {
+    res.status(400).send("Bad request: Invalid input data.");
+  } else {
+    if (username === fakeUser.username) {
+      //Conflicting usernames. Assuming it's not allowed, then:
+      res.status(409).send("Username already taken");
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPWd = await bcrypt.hash(userPwd, salt);
+    
+      fakeUser.username = username;
+      fakeUser.pwd = hashedPWd;
+      
+      const token = generateAccessToken(username);
+      res.status(201).send(token);
+    }
+  }
+});
 
 app.get("/user/:user", async (req, res) => {
   const user_name = req.params["user"];
