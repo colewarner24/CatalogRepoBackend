@@ -15,6 +15,10 @@ const fakeUser = {username: "hello", pwd: "hello"};
 app.use(cors());
 app.use(express.json());
 
+function generateAccessToken(username) {
+  return jwt.sign({"username": username}, process.env.TOKEN_SECRET, { expiresIn: "60s" });
+}
+
 app.post("/testinglogin", async (req, res) => {
   const username = req.body.username;
   const pwd = req.body.pwd;
