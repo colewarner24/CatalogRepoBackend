@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 dotenv.config();
 
 const userServices = require("./models/user-services");
-const testingpass = [];
+const fakeUser = {username: "hello", pwd: "hello"};
 
 app.use(cors());
 app.use(express.json());
