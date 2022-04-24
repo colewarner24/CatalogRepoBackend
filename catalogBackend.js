@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 dotenv.config();
 
 const userServices = require("./models/user-services");
-const fakeUser = {username: "hello", pwd: "hello"};
+const dbUser = {username: "", password: ""};
 
 app.use(cors());
 app.use(express.json());
@@ -21,10 +21,13 @@ function generateAccessToken(username) {
 
 app.post("/testinglogin", async (req, res) => {
   const username = req.body.username;
-  const pwd = req.body.pwd;
-  const retrievedUser = fakeUser;
-  if (retrievedUser.username && retrievedUser.pwd) {
-    const isValid = await bcrypt.compare(pwd, retrievedUser.pwd);
+  const password = req.body.password;
+  
+  const retrievedUserlist = await userServices.findUserByUserName(username);
+  const retrievedUser = retrievedUserlist[0]
+
+  if (retrievedUser.username){
+    const isValid = await bcrypt.compare(password, retrievedUser.password);
     if (isValid) {
       // Generate token and respond
       const token = generateAccessToken(username);
@@ -35,7 +38,7 @@ app.post("/testinglogin", async (req, res) => {
     }
   } else {
     //Unauthorized due to invalid username
-    res.status(401).send("Unauthorized");
+    res.status(400).send("Bad user data");
   }
 }); 
 
@@ -43,20 +46,30 @@ app.post("/testinglogin", async (req, res) => {
 app.post("/testingsignup", async (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
-  const userPwd = req.body.pwd; 
-  if (!username && !pwd && !email) {
+  const userPwd = req.body.password; 
+  user_search = await userServices.findUserByUserName(username)
+  console.log(user_search)
+  if (!username && !userPwd && !email) {
     res.status(400).send("Bad request: Invalid input data.");
   } else {
-    if (username === fakeUser.username) {
+    if (user_search.length > 0) {
       //Conflicting usernames. Assuming it's not allowed, then:
       res.status(409).send("Username already taken");
     } else {
       const salt = await bcrypt.genSalt(10);
       const hashedPWd = await bcrypt.hash(userPwd, salt);
     
-      fakeUser.username = username;
-      fakeUser.pwd = hashedPWd;
+      dbUser.username = username;
+      dbUser.password = hashedPWd;
+
+      console.log(dbUser)
       
+    const savedUser = await userServices.addUser(dbUser);
+    if (!savedUser) {
+      //res.status(201).send(savedUser);
+      res.status(500).end();
+    }
+
       const token = generateAccessToken(username);
       res.status(201).send(token);
     }

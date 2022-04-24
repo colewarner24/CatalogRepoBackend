@@ -7,6 +7,15 @@ const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    // email: {
+    //   type: String,
+    //   trim: true, 
+    // }
     profile_pic_url: {
       type: String,
     },
