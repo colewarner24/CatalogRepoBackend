@@ -7,8 +7,8 @@ const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    profile_pic_url: {
-      type: String,
+    profile: {
+      type: String
     },
     bio: {
       type: String,

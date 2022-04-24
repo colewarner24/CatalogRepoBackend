@@ -4,6 +4,8 @@ const port = 5000;
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended: false}));
 
 const userServices = require("./models/user-services");
 
@@ -43,6 +45,10 @@ app.get("/search/artist/:artist", async (req, res) => {
 
 app.post("/user", async (req, res) => {
   const user = req.body;
+  //let imgBase64 = '';
+  //let reader = new FileReader();
+  //reader.readAsDataURL(user.profile);
+  //user.profile = reader.result;
   const savedUser = await userServices.addUser(user);
   if (savedUser) res.status(201).send(savedUser);
   else res.status(500).end();
