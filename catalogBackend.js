@@ -26,6 +26,8 @@ app.post("/testinglogin", async (req, res) => {
   const retrievedUserlist = await userServices.findUserByUserName(username);
   const retrievedUser = retrievedUserlist[0]
 
+  console.log(password)
+
   if (retrievedUser.username){
     const isValid = await bcrypt.compare(password, retrievedUser.password);
     if (isValid) {
@@ -56,6 +58,7 @@ app.post("/testingsignup", async (req, res) => {
       //Conflicting usernames. Assuming it's not allowed, then:
       res.status(409).send("Username already taken");
     } else {
+      console.log(req.body)
       const salt = await bcrypt.genSalt(10);
       const hashedPWd = await bcrypt.hash(userPwd, salt);
     
