@@ -17,20 +17,54 @@ const dbUser = {username: "", password: ""};
 app.use(cors());
 app.use(express.json());
 
+/* Using this funcion as a "middleware" function for
+  all the endpoints that need access control protecion */
+  function authenticateUser(req, res, next) {
+    console.log("auth")
+    const authHeader = req.headers["authorization"];
+    //Getting the 2nd part of the auth hearder (the token)
+    const token = authHeader && authHeader.split(' ')[1];
+  
+    if (!token) {
+      console.log("No token received");
+      return res.status(401).end();
+    } else {
+      // If a callback is supplied, verify() runs async
+      // If a callback isn't supplied, verify() runs synchronously
+      // verify() throws an error if the token is invalid
+      try {
+        // verify() returns the decoded obj which includes whatever objs
+        // we use to code/sign the token
+        console.log(token)
+        console.log(process.env.TOKEN_SECRET)
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);   
+        // in our case, we used the username to sign the token
+
+        console.log("success in decoding");
+        next();
+      } catch (error) {
+        console.log(error);
+        return res.status(401).end();  
+      }
+    }
+  }
+
 function generateAccessToken(username) {
   return jwt.sign({"username": username}, process.env.TOKEN_SECRET, { expiresIn: "60s" });
 }
 
-app.post("/testinglogin", async (req, res) => {
+app.post("/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   
   const retrievedUserlist = await userServices.findUserByUserName(username);
   const retrievedUser = retrievedUserlist[0]
+  console.log("hereere")
+  console.log(retrievedUserlist[0].username)
 
   console.log(password)
 
-  if (retrievedUser.username){
+  if (retrievedUser && retrievedUser.username != undefined){
     const isValid = await bcrypt.compare(password, retrievedUser.password);
     if (isValid) {
       // Generate token and respond
@@ -47,7 +81,7 @@ app.post("/testinglogin", async (req, res) => {
 }); 
 
 
-app.post("/testingsignup", async (req, res) => {
+app.post("/signup", async (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
   const userPwd = req.body.password; 
@@ -60,7 +94,6 @@ app.post("/testingsignup", async (req, res) => {
       //Conflicting usernames. Assuming it's not allowed, then:
       res.status(409).send("Username already taken");
     } else {
-      console.log(req.body)
       const salt = await bcrypt.genSalt(10);
       const hashedPWd = await bcrypt.hash(userPwd, salt);
     
@@ -81,10 +114,13 @@ app.post("/testingsignup", async (req, res) => {
   }
 });
 
-app.get("/user/:user", async (req, res) => {
+app.get("/user/:user", authenticateUser, async (req, res) => {
   const user_name = req.params["user"];
+  console.log("username")
+  console.log(user_name)
   const result = await userServices.findUserByUserName(user_name);
-  if (result === undefined || result === null || result.length === 0) {
+  console.log(result[0])
+  if (result === undefined || result === null) {
     console.log("Point reached");
     res.status(404).send("Resource not found.");
   } else {
