@@ -13,11 +13,11 @@ const UserSchema = new mongoose.Schema(
       trim: true,
     },
     profile: {
-      type: String
+      type: String,
     },
     // email: {
     //   type: String,
-    //   trim: true, 
+    //   trim: true,
     // }
     profile_pic_url: {
       type: String,

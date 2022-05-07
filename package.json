@@ -4,7 +4,7 @@
   "description": "",
   "main": "catalogBackend.js",
   "scripts": {
-    "test": "jest",
+    "test": "prettier --check . && jest",
     "dev": "nodemon catalogBackend.js"
   },
   "author": "Cole Warner",
