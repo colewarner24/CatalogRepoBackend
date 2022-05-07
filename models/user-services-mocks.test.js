@@ -55,6 +55,7 @@ beforeAll(async () => {
 test("Adding a user and then getting a user", async () => {
   const user = {
     username: "Nickisadog",
+    password: "garsh",
     bio: "here is my bio",
     profile_pic_url: "dasgg",
     albums: ["Album1", "Album2", "Album3"],
@@ -87,6 +88,7 @@ test("Adding a user and then recieving an error", async () => {
 test("Adding a user and then pushing a review", async () => {
   const user = {
     username: "iwantreview",
+    password: "thunderThighs",
     bio: "here is my bio",
     profile_pic_url: "dasgg",
     albums: ["Album1", "Album2", "Album3"],
@@ -115,6 +117,7 @@ test("Finding a non existant user", async () => {
 test("Adding a duplicate user", async () => {
   const user1 = {
     username: "a new test",
+    password: "yessuh",
     bio: "here is my bio",
     profile_pic_url: "dasgg",
     albums: ["Album1", "Album2", "Album3"],
