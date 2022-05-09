@@ -155,6 +155,7 @@ app.post("/user", async (req, res) => {
   //reader.readAsDataURL(user.profile);
   //user.profile = reader.result;
   const savedUser = await userServices.addUser(user);
+  console.log(savedUser)
   if (savedUser) res.status(201).send(savedUser);
   else res.status(500).end();
 });
