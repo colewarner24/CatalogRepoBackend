@@ -83,7 +83,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  let newUser = req.body
+  let newUser = req.body;
   const username = req.body.username;
   const email = req.body.email;
   const userPwd = req.body.password;
@@ -156,7 +156,7 @@ app.post("/user", async (req, res) => {
   //reader.readAsDataURL(user.profile);
   //user.profile = reader.result;
   const savedUser = await userServices.addUser(user);
-  console.log(savedUser)
+  console.log(savedUser);
   if (savedUser) res.status(201).send(savedUser);
   else res.status(500).end();
 });
