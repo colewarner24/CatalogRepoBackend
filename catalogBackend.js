@@ -83,6 +83,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
+  let newUser = req.body
   const username = req.body.username;
   const email = req.body.email;
   const userPwd = req.body.password;
@@ -98,12 +99,11 @@ app.post("/signup", async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       const hashedPWd = await bcrypt.hash(userPwd, salt);
 
-      dbUser.username = username;
-      dbUser.password = hashedPWd;
+      newUser.password = hashedPWd;
 
-      console.log(dbUser);
+      console.log(newUser);
 
-      const savedUser = await userServices.addUser(dbUser);
+      const savedUser = await userServices.addUser(newUser);
       if (!savedUser) {
         //res.status(201).send(savedUser);
         res.status(500).end();

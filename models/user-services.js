@@ -49,12 +49,14 @@ async function findUserByUserName(username) {
 
 async function addUser(user) {
   const userModel = getDbConnection().model("User", UserSchema);
+  console.log(user.username)
   const userCheck = await findUserByUserName(user.username);
   if (userCheck.length != 0) {
     console.log("Already a user with username:", user.username);
     return false;
   }
   try {
+    console.log("adding user")
     const userToAdd = new userModel(user);
     const savedUser = await userToAdd.save();
     return savedUser;
