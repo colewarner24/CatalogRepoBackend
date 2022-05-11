@@ -12,6 +12,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: false }));
 
 const userServices = require("./models/user-services");
+const res = require("express/lib/response");
 const dbUser = { username: "", password: "" };
 
 app.use(cors());
@@ -106,6 +107,31 @@ app.post("/signup", async (req, res) => {
       }
 
       const token = generateAccessToken(username);
+      res.status(201).send(token);
+    }
+  }
+});
+
+app.patch("/patch", async(req, res) => {
+  let updatedUser = req.body;
+  if (!updatedUser.username) {
+    res.status(400).send("Bad Request: Invalid User");
+  }
+  else {
+    user_search = await userServices.findUserByUserName(updatedUser.username);
+    if (user_search.length < 1) {
+      // Cannot update a user that does not exist
+      res.status(409).send("User does not exist");
+    }
+    else {
+      // User exist so let's update him
+      const newUser = await userServices.updateUser(updatedUser);
+      if (!newUser) {
+        // update failed
+        res.status(500).end();
+      }
+      
+      const token = generateAccessToken(updatedUser.username);
       res.status(201).send(token);
     }
   }

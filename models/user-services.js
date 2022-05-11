@@ -66,6 +66,26 @@ async function addUser(user) {
   }
 }
 
+async function updateUser(newUser) {
+  // const userModel = getDbConnection().model("User", UserSchema);
+  const userCheck = await findUserByUserName(newUser.username);
+  if (userCheck.length == 0) {
+    console.log("No user with username: ", newUser.username);
+    return false;
+  }
+  oldUser = userCheck[0];
+  try {
+    console.log("updating user")
+    oldUser.overwrite(newUser);
+    editedUser = await oldUser.save();
+    return editedUser;
+  }
+  catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 async function getAlbum(album_name) {
   return spotifyApi.searchAlbums(`album:${album_name}`);
 }
@@ -92,3 +112,4 @@ exports.addReview = addReview;
 exports.getAlbum = getAlbum;
 exports.getArtist = getArtist;
 exports.setConnection = setConnection;
+exports.updateUser = updateUser;
