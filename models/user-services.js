@@ -75,12 +75,11 @@ async function updateUser(newUser) {
   }
   oldUser = userCheck[0];
   try {
-    console.log("updating user")
+    console.log("updating user");
     oldUser.overwrite(newUser);
     editedUser = await oldUser.save();
     return editedUser;
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
     return false;
   }

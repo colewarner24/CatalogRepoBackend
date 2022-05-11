@@ -112,25 +112,23 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.patch("/patch", async(req, res) => {
+app.patch("/patch", async (req, res) => {
   let updatedUser = req.body;
   if (!updatedUser.username) {
     res.status(400).send("Bad Request: Invalid User");
-  }
-  else {
+  } else {
     user_search = await userServices.findUserByUserName(updatedUser.username);
     if (user_search.length < 1) {
       // Cannot update a user that does not exist
       res.status(409).send("User does not exist");
-    }
-    else {
+    } else {
       // User exist so let's update him
       const newUser = await userServices.updateUser(updatedUser);
       if (!newUser) {
         // update failed
         res.status(500).end();
       }
-      
+
       const token = generateAccessToken(updatedUser.username);
       res.status(201).send(token);
     }
