@@ -61,8 +61,6 @@ app.post("/login", async (req, res) => {
 
   const retrievedUserlist = await userServices.findUserByUserName(username);
   const retrievedUser = retrievedUserlist[0];
-  console.log("hereere");
-  console.log(retrievedUserlist[0].username);
 
   console.log(password);
 
