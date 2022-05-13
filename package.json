@@ -5,7 +5,8 @@
   "main": "catalogBackend.js",
   "scripts": {
     "test": "prettier --check . && jest",
-    "dev": "nodemon catalogBackend.js"
+    "dev": "nodemon catalogBackend.js",
+    "build": "webpack"
   },
   "heroku-run-build-script": true,
   "author": "Cole Warner",
