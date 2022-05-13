@@ -27,10 +27,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
           check-latest: true
+      - run: npm ci
+      - run: npm run test
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "musiccatalogbe" #Must be unique on Heroku
           heroku_email: "psou@calpoly.edu" #Must be the one you used on Heroku
-      - run: npm ci
-      - run: npm run test
