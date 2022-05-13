@@ -5,8 +5,10 @@
   "main": "catalogBackend.js",
   "scripts": {
     "test": "prettier --check . && jest",
+    "start": "node catalogBackend.js",
     "dev": "nodemon catalogBackend.js"
   },
+  "heroku-run-build-script": true,
   "author": "Cole Warner",
   "license": "ISC",
   "dependencies": {
