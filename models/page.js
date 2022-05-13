@@ -14,10 +14,6 @@ const PageSchema = new mongoose.Schema(
     pagePic: {
       type: String,
     },
-    email: {
-       type: String,
-       trim: true,
-    },
     bio: {
       type: String,
       trim: true,
