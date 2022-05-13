@@ -1,22 +1,17 @@
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema(
+const PageSchema = new mongoose.Schema(
   {
-    username: {
+    owner: {
       type: String,
       required: true,
       trim: true,
     },
-    password: {
+    pageName: {
       type: String,
-      required: true,
       trim: true,
     },
-    displayName: {
-      type: String,
-      trim: true
-    },
-    profile: {
+    pagePic: {
       type: String,
     },
     email: {
@@ -27,15 +22,15 @@ const UserSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    pages: {
+    albums: {
       type: Array
     },
-    reviews: {
+    artists: {
       type: Array,
     },
   },
 
-  { collection: "users_list" }
+  { collection: "pages_list" }
 );
 
-module.exports = UserSchema;
+module.exports = PageSchema;
