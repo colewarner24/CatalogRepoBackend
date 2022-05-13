@@ -5,6 +5,7 @@
   "main": "catalogBackend.js",
   "scripts": {
     "test": "prettier --check . && jest",
+    "start": "nodemon catalogBackend.js",
     "dev": "nodemon catalogBackend.js",
     "build": "webpack"
   },
