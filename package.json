@@ -5,7 +5,7 @@
   "main": "catalogBackend.js",
   "scripts": {
     "test": "prettier --check . && jest",
-    "start": "nodemon catalogBackend.js",
+    "start": "node catalogBackend.js",
     "dev": "nodemon catalogBackend.js"
   },
   "heroku-run-build-script": true,
