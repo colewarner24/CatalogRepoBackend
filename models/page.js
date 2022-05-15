@@ -19,7 +19,7 @@ const PageSchema = new mongoose.Schema(
       trim: true,
     },
     albums: {
-      type: Array
+      type: Array,
     },
     artists: {
       type: Array,

@@ -12,11 +12,11 @@ const ReviewSchema = new mongoose.Schema(
       trim: true,
     },
     rating: {
-       type: String,
-       trim: true,
+      type: String,
+      trim: true,
     },
     reviewedItem: {
-      type: Object
+      type: Object,
     },
   },
 

@@ -14,21 +14,21 @@ const UserSchema = new mongoose.Schema(
     },
     displayName: {
       type: String,
-      trim: true
+      trim: true,
     },
     profile: {
       type: String,
     },
     email: {
-       type: String,
-       trim: true,
+      type: String,
+      trim: true,
     },
     bio: {
       type: String,
       trim: true,
     },
     pages: {
-      type: Array
+      type: Array,
     },
     reviews: {
       type: Array,

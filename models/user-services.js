@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const UserSchema = require("./user");
+const PageSchema = require("./page");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -105,10 +106,72 @@ async function addReview(review) {
   } else return false;
 }
 
-exports.addUser = addUser;
-exports.findUserByUserName = findUserByUserName;
-exports.addReview = addReview;
-exports.getAlbum = getAlbum;
-exports.getArtist = getArtist;
+// PAGE FUNCTIONS
+// Returns name of all pages for a single user
+// Might not need this one
+async function getAllPages(username) {
+  const pageModel = getDbConnection().model("Page", PageSchema);
+  const result = await pageModel.find(
+    { owner: username },
+    { projection: { pageName: 1 } }
+  );
+  return result;
+}
+
+// Returns specific page of user
+async function getFullPage(username, pageName) {
+  const pageModel = getDbConnection().model("Page", PageSchema);
+  const page = await pageModel.find({ owner: username, pageName: pageName });
+  return page;
+}
+
+// Adds a page to the user if pageName doesn't already exist
+async function addPage(page) {
+  const pageModel = getDbConnection().model("Page", PageSchema);
+  const pages = await getFullPage(page.owner, page.pageName);
+  if (pages.length != 0) {
+    console.log("Page with that name already");
+    console.log(pages);
+    return false;
+  }
+  try {
+    console.log("adding page");
+    const pageToAdd = new pageModel(page);
+    const savedPage = await pageToAdd.save();
+    return savedPage;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+// Updates an already made page
+async function updatePage(newPage, oldPageName) {
+  page = await getFullPage(newPage.owner, oldPageName);
+  if (page.length == 0) {
+    console.log("No page with this name");
+    return false;
+  }
+  oldPage = page[0];
+  try {
+    console.log("updating page");
+    oldPage.overwrite(newPage);
+    editedPage = await oldPage.save();
+    return editedPage;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 exports.setConnection = setConnection;
+exports.findUserByUserName = findUserByUserName;
+exports.addUser = addUser;
 exports.updateUser = updateUser;
+exports.getArtist = getArtist;
+exports.getAlbum = getAlbum;
+exports.addReview = addReview;
+exports.getAllPages = getAllPages;
+exports.getFullPage = getFullPage;
+exports.addPage = addPage;
+exports.updatePage = updatePage;
