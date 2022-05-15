@@ -112,7 +112,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.patch("/patch", async (req, res) => {
+app.patch("/patchprofile", async (req, res) => {
   let updatedUser = req.body;
   if (!updatedUser.username) {
     res.status(400).send("Bad Request: Invalid User");
