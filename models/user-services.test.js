@@ -85,30 +85,6 @@ test("Adding a user and then recieving an error", async () => {
   expect(saved_user.username).toBe(undefined);
 });
 
-test("Adding a user and then pushing a review", async () => {
-  const user = {
-    username: "iwantreview",
-    password: "garsh",
-    bio: "here is my bio",
-    profile_pic_url: "dasgg",
-    albums: ["Album1", "Album2", "Album3"],
-    artists: ["Artist 1", "Artist 2"],
-    reviews: [],
-  };
-  const review1 = {
-    username: "iwantreview",
-    album: "Blonde",
-    text: "God this is good",
-  };
-
-  const saved_user = await userServices.addUser(user);
-  expect(saved_user.reviews.length).toBe(0);
-  const review_data = await userServices.addReview(review1);
-  const getuser = await userServices.findUserByUserName(user.username);
-  expect(getuser[0].reviews.length).toBe(1);
-  expect(getuser[0].reviews[0].text).toBe(review1.text);
-});
-
 test("Finding a non existant user", async () => {
   const saved_user = await userServices.findUserByUserName("sgagfsgsd");
   expect(saved_user).toEqual([]);
@@ -129,17 +105,6 @@ test("Adding a duplicate user", async () => {
   const saved_user2 = await userServices.addUser(user1);
   expect(saved_user1.username).toBe("a new test");
   expect(saved_user2).toBe(false);
-});
-
-test("posting an invalid review", async () => {
-  const review2 = {
-    username: "this is fake accjdsaj;gjsount",
-    album: "Blonde",
-    text: "God this is good",
-  };
-
-  const review_data = await userServices.addReview(review2);
-  expect(review_data).toBe(false);
 });
 
 afterAll(async () => {
