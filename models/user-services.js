@@ -100,10 +100,7 @@ async function getArtist(artist_name) {
 // Might not need this one
 async function getAllPages(username) {
   const pageModel = getDbConnection().model("Page", PageSchema);
-  const result = await pageModel.find(
-    { owner: username },
-    { projection: { pageName: 1 } }
-  );
+  const result = await pageModel.find({ owner: username });
   return result;
 }
 

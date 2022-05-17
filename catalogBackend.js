@@ -13,6 +13,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: false }));
 
 const userServices = require("./models/user-services");
 const res = require("express/lib/response");
+const req = require("express/lib/request");
 const dbUser = { username: "", password: "" };
 
 app.use(cors());
@@ -112,6 +113,29 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.post("/page", async (req, res) => {
+  let newPage = req.body;
+  if (!newPage.owner || !newPage.pageName) {
+    res.status(409).send("Bad Request");
+  } else {
+    pageSearch = await userServices.getFullPage(
+      newPage.owner,
+      newPage.pageName
+    );
+    if (pageSearch > 0) {
+      res.status(409).send("Pagename already taken");
+    } else {
+      const savedPage = await userServices.addPage(newPage);
+      if (!savedPage) {
+        res.status(500).end();
+      }
+
+      const token = generateAccessToken(savedPage.owner);
+      res.status(201).send(token);
+    }
+  }
+});
+
 app.patch("/patchprofile", async (req, res) => {
   let updatedUser = req.body;
   if (!updatedUser.username) {
@@ -135,19 +159,47 @@ app.patch("/patchprofile", async (req, res) => {
   }
 });
 
-app.get("/user/:user", authenticateUser, async (req, res) => {
-  const user_name = req.params["user"];
-  console.log("username");
-  console.log(user_name);
-  const result = await userServices.findUserByUserName(user_name);
-  console.log(result[0]);
-  if (result === undefined || result === null) {
-    console.log("Point reached");
-    res.status(404).send("Resource not found.");
+app.patch("/patchpage", async (req, res) => {
+  let updatedPage = req.body.newPage;
+  console.log("Updating page" + req.body.updatedPage);
+  if (!updatedPage.owner || !updatedPage.pageName) {
+    res.status(400).send("Bad Request");
   } else {
-    res.status(200).send(result);
+    pageSearch = await userServices.getFullPage(
+      updatedPage.owner,
+      updatedPage.pageName
+    );
+    if (pageSearch < 1) {
+      const newPage = await userServices.updatePage(
+        updatedPage,
+        req.body.oldName
+      );
+      if (!newPage) {
+        res.status(500).end();
+      }
+
+      const token = generateAccessToken(updatedPage.owner);
+      res.status(201).send(token);
+    }
   }
 });
+
+app.get(
+  "/user/:user",
+  /*authenticateUser,*/ async (req, res) => {
+    const user_name = req.params["user"];
+    console.log("username");
+    console.log(user_name);
+    const result = await userServices.findUserByUserName(user_name);
+    console.log(result[0]);
+    if (result === undefined || result === null) {
+      console.log("Point reached");
+      res.status(404).send("Resource not found.");
+    } else {
+      res.status(200).send(result);
+    }
+  }
+);
 
 app.get("/search/album/:album", async (req, res) => {
   const album_name = req.params["album"];
@@ -166,6 +218,16 @@ app.get("/search/artist/:artist", async (req, res) => {
     res.status(404).send(err);
   } else {
     res.send(data.body);
+  }
+});
+
+app.get("/pages/:user", async (req, res) => {
+  const username = req.params["user"];
+  const result = await userServices.getAllPages(username);
+  if (result === undefined || result === null) {
+    res.status(404).send("Not found");
+  } else {
+    res.status(200).send(result);
   }
 });
 
