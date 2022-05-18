@@ -163,23 +163,28 @@ app.patch("/patchpage", async (req, res) => {
   let updatedPage = req.body.newPage;
   console.log("Updating page" + req.body.updatedPage);
   if (!updatedPage.owner || !updatedPage.pageName) {
+    console.log("bad");
     res.status(400).send("Bad Request");
   } else {
     pageSearch = await userServices.getFullPage(
       updatedPage.owner,
       updatedPage.pageName
     );
-    if (pageSearch < 1) {
+    console.log("Y");
+    if (updatedPage.pageName === req.body.oldName || pageSearch < 1) {
       const newPage = await userServices.updatePage(
         updatedPage,
         req.body.oldName
       );
+      console.log("Ye");
       if (!newPage) {
         res.status(500).end();
       }
-
+      console.log("yes");
       const token = generateAccessToken(updatedPage.owner);
       res.status(201).send(token);
+    } else {
+      // Page with new name already exists
     }
   }
 });
