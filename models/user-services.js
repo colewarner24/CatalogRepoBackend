@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const UserSchema = require("./user");
+const PageSchema = require("./page");
+const ReviewSchema = require("./review");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -93,22 +95,126 @@ async function getArtist(artist_name) {
   return spotifyApi.searchArtists(`artist:${artist_name}`);
 }
 
-async function addReview(review) {
-  const userModel = getDbConnection().model("User", UserSchema);
-  const username = review.username;
-  if ((await findUserByUserName(username)).length != 0) {
-    await userModel.updateOne(
-      { username: username },
-      { $push: { reviews: review } }
-    );
-    return true;
-  } else return false;
+// PAGE FUNCTIONS
+// Returns name of all pages for a single user
+// Might not need this one
+async function getAllPages(username) {
+  const pageModel = getDbConnection().model("Page", PageSchema);
+  const result = await pageModel.find({ owner: username });
+  return result;
 }
 
-exports.addUser = addUser;
-exports.findUserByUserName = findUserByUserName;
-exports.addReview = addReview;
-exports.getAlbum = getAlbum;
-exports.getArtist = getArtist;
+// Returns specific page of user
+async function getFullPage(username, pageName) {
+  const pageModel = getDbConnection().model("Page", PageSchema);
+  const page = await pageModel.find({ owner: username, pageName: pageName });
+  return page;
+}
+
+// Adds a page to the user if pageName doesn't already exist
+async function addPage(page) {
+  const pageModel = getDbConnection().model("Page", PageSchema);
+  const pages = await getFullPage(page.owner, page.pageName);
+  if (pages.length != 0) {
+    console.log("Page with that name already");
+    console.log(pages);
+    return false;
+  }
+  try {
+    console.log("adding page");
+    const pageToAdd = new pageModel(page);
+    const savedPage = await pageToAdd.save();
+    return savedPage;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+// Updates an already made page
+async function updatePage(newPage, oldPageName) {
+  page = await getFullPage(newPage.owner, oldPageName);
+  if (page.length == 0) {
+    console.log("No page with this name");
+    return false;
+  }
+  oldPage = page[0];
+  try {
+    console.log("updating page");
+    oldPage.overwrite(newPage);
+    editedPage = await oldPage.save();
+    return editedPage;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+// REVIEW FUNCTIONS
+async function getAllReviews(username) {
+  const reviewModel = getDbConnection().model("Review", ReviewSchema);
+  const reviews = reviewModel.find({ owner: username });
+  return reviews;
+}
+
+async function getReview(username, reviewedObj) {
+  const reviewModel = getDbConnection().model("Review", ReviewSchema);
+  const review = reviewModel.find({
+    owner: username,
+    reviewedItem: reviewedObj,
+  });
+  return review;
+}
+
+async function addReview(newReview) {
+  const reviewModel = getDbConnection().model("Review", ReviewSchema);
+  const reviewCheck = await getReview(newReview.owner, newReview.reviewedItem);
+  if (reviewCheck.length != 0) {
+    console.log("Review already exists");
+    console.log(reviewCheck);
+    return false;
+  }
+  try {
+    const reviewToAdd = new reviewModel(newReview);
+    const savedReview = await reviewToAdd.save();
+    return savedReview;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+async function updateReview(updatedReview) {
+  const reviewCheck = await getReview(
+    updatedReview.owner,
+    updatedReview.reviewedItem
+  );
+  if (reviewCheck.length == 0) {
+    console.log("can't update review that doesnt exist");
+    return false;
+  }
+  oldReview = reviewCheck[0];
+  try {
+    oldReview.overwrite(updatedReview);
+    editedReview = await oldReview.save();
+    return editedReview;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 exports.setConnection = setConnection;
+exports.findUserByUserName = findUserByUserName;
+exports.addUser = addUser;
 exports.updateUser = updateUser;
+exports.getArtist = getArtist;
+exports.getAlbum = getAlbum;
+exports.getAllPages = getAllPages;
+exports.getFullPage = getFullPage;
+exports.addPage = addPage;
+exports.updatePage = updatePage;
+exports.addReview = addReview;
+exports.getAllReviews = getAllReviews;
+exports.getReview = getReview;
+exports.updateReview = updateReview;

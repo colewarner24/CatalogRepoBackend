@@ -1,0 +1,26 @@
+const mongoose = require("mongoose");
+
+const ReviewSchema = new mongoose.Schema(
+  {
+    owner: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    content: {
+      type: String,
+      trim: true,
+    },
+    rating: {
+      type: Number,
+      trim: true,
+    },
+    reviewedItem: {
+      type: Object,
+    },
+  },
+
+  { collection: "reviews_list" }
+);
+
+module.exports = ReviewSchema;

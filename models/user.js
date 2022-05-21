@@ -12,24 +12,22 @@ const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    displayName: {
+      type: String,
+      trim: true,
+    },
     profile: {
       type: String,
     },
-    // email: {
-    //   type: String,
-    //   trim: true,
-    // }
-    profile_pic_url: {
+    email: {
       type: String,
+      trim: true,
     },
     bio: {
       type: String,
       trim: true,
     },
-    albums: {
-      type: Array,
-    },
-    artists: {
+    pages: {
       type: Array,
     },
     reviews: {
