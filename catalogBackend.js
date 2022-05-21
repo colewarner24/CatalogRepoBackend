@@ -3,7 +3,6 @@ const app = express();
 const port = 5000;
 const cors = require("cors");
 const dotenv = require("dotenv");
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -256,5 +255,5 @@ app.post("/reviews", async (req, res) => {
 });
 
 app.listen(process.env.PORT || port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log("REST API is listening.");
 });
