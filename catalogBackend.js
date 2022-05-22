@@ -59,7 +59,7 @@ function generateAccessToken(username) {
 app.post("/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-
+  console.log("YES");
   const retrievedUserlist = await userServices.findUserByUserName(username);
   const retrievedUser = retrievedUserlist[0];
 
