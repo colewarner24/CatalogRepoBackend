@@ -168,20 +168,32 @@ async function getReview(username, reviewedObj) {
 
 async function addReview(newReview) {
   const reviewModel = getDbConnection().model("Review", ReviewSchema);
-  const reviewCheck = await getReview(newReview.owner, newReview.reviewedItem);
-  if (reviewCheck.length != 0) {
-    console.log("Review already exists");
-    console.log(reviewCheck);
-    return false;
-  }
+  // const reviewCheck = await getReview(newReview.owner, newReview.reviewedItem);
+  // if (reviewCheck.length != 0) {
+  //   console.log("Review already exists");
+  //   console.log(reviewCheck);
+  //   return false;
+  // }
   try {
     const reviewToAdd = new reviewModel(newReview);
     const savedReview = await reviewToAdd.save();
-    return savedReview;
+    findUserByUserName(newReview.owner).then((userList) => {
+      user = userList[0]
+      let revList = user.reviews
+      if (! revList){
+        revList = []
+      }
+      revList.push(newReview)
+      user.reviews = revList
+      updateUser(user).then((result) => {
+        console.log("here")
+      })
+    })
   } catch (error) {
     console.log(error);
     return false;
   }
+  return true;
 }
 
 async function updateReview(updatedReview) {

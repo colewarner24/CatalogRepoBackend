@@ -7,6 +7,10 @@ const ReviewSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    album_name: {
+      type: String,
+      trim: true,
+    },
     content: {
       type: String,
       trim: true,
