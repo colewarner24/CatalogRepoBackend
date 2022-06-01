@@ -178,22 +178,22 @@ async function addReview(newReview) {
     const reviewToAdd = new reviewModel(newReview);
     const savedReview = await reviewToAdd.save();
     findUserByUserName(newReview.owner).then((userList) => {
-      user = userList[0]
-      let revList = user.reviews
-      if (! revList){
-        revList = []
+      user = userList[0];
+      let revList = user.reviews;
+      if (!revList) {
+        revList = [];
       }
-      revList.push(newReview)
-      user.reviews = revList
+      revList.push(newReview);
+      user.reviews = revList;
       updateUser(user).then((result) => {
-        console.log("here")
-      })
-    })
+        console.log("here");
+        return true;
+      });
+    });
   } catch (error) {
     console.log(error);
     return false;
   }
-  return true;
 }
 
 async function updateReview(updatedReview) {
