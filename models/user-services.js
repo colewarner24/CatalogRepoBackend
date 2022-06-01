@@ -177,7 +177,9 @@ async function addReview(newReview) {
   try {
     const reviewToAdd = new reviewModel(newReview);
     const savedReview = await reviewToAdd.save();
-    findUserByUserName(newReview.owner).then((userList) => {
+    userList = await findUserByUserName(newReview.owner)
+    // findUserByUserName(newReview.owner).then((userList) => {
+      console.log("in call")
       user = userList[0];
       let revList = user.reviews;
       if (!revList) {
@@ -185,15 +187,17 @@ async function addReview(newReview) {
       }
       revList.push(newReview);
       user.reviews = revList;
-      updateUser(user).then((result) => {
-        console.log("here");
+      result = await updateUser(user)
+      // updateUser(user).then((result) => {
+        console.log("done updating user");
         return true;
-      });
-    });
+      // });
+    // });
   } catch (error) {
-    console.log(error);
+    console.log("error caught" + error);
     return false;
   }
+  console.log("outside func")
 }
 
 async function updateReview(updatedReview) {
