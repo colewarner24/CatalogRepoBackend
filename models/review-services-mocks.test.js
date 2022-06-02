@@ -27,7 +27,7 @@ test("Adding review and geting review", async () => {
   const review = {
     owner: "Garsh",
     reviewedItem: "poop",
-    rating: 3.5,
+    rating: "3.5",
   };
 
   // Add review
@@ -45,7 +45,7 @@ test("Adding duplicate review to same user", async () => {
   const review = {
     owner: "Garsh",
     reviewedItem: "poop",
-    rating: 3.5,
+    rating: "3.5",
   };
 
   // add first time
@@ -59,15 +59,15 @@ test("update existing review", async () => {
   const review = {
     owner: "Garsh",
     reviewedItem: "poop",
-    rating: 3.5,
+    rating: "3.5",
   };
 
   // add first time
   await userServices.addReview(review);
   // change reviewedItem and update db one
-  review.rating = 4.5;
+  review.rating = "4.5";
   editedReview = await userServices.updateReview(review);
-  expect(editedReview.rating).toBe(4.5);
+  expect(editedReview.rating).toBe("4.5");
 });
 
 afterAll(async () => {

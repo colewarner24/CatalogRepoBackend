@@ -265,10 +265,11 @@ app.post("/user", async (req, res) => {
 
 app.post("/reviews", async (req, res) => {
   const review = req.body;
-  const success = await userServices.addReview(review);
-  console.log("herein" + success)
-  if (success) res.status(201).send(success);
-  else res.status(500).end();
+  userServices.addReview(review).then((success) =>{
+    console.log("done adding review" + success);
+    if (success) res.status(201).send(success);
+    else res.status(500).end();
+  })
 });
 
 app.listen(process.env.PORT || port, () => {
