@@ -98,7 +98,7 @@ async function getArtist(artist_name) {
 // PAGE FUNCTIONS
 // Returns name of all pages for a single user
 // Might not need this one
-async function getAllPages(username) {
+async function getAllPages(username) {;
   const pageModel = getDbConnection().model("Page", PageSchema);
   const result = await pageModel.find({ owner: username });
   return result;
@@ -129,6 +129,14 @@ async function addPage(page) {
     console.log(error);
     return false;
   }
+}
+
+// Gets everypage in the collection that is similar to the given pagename
+async function pageQuery(pagename) {
+  const pageModel = getDbConnection().model("Page", PageSchema);
+  const pages = await pageModel.find( { pageName: { $in: [new RegExp(pagename, "g"), 
+    new RegExp(pagename.toLowerCase(), "g"), new RegExp(pagename.toUpperCase(), "g")] } } );
+  return pages;
 }
 
 // Updates an already made page
@@ -226,6 +234,7 @@ exports.getAllPages = getAllPages;
 exports.getFullPage = getFullPage;
 exports.addPage = addPage;
 exports.updatePage = updatePage;
+exports.pageQuery = pageQuery;
 exports.addReview = addReview;
 exports.getAllReviews = getAllReviews;
 exports.getReview = getReview;
