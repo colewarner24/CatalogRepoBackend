@@ -188,21 +188,17 @@ app.patch("/patchpage", async (req, res) => {
   }
 });
 
-app.get(
-  "/search/:pagename",
-  async (req, res) => {
-    console.log("garsh");
-    const page_name = req.params["pagename"];
-    const result = await userServices.pageQuery(page_name);
-    if (result === undefined || result === null) {
-      console.log("Yes");
-      res.status(404).send("Resource not found.");
-    }
-    else {
-      res.status(200).send(result);
-    }
+app.get("/search/:pagename", async (req, res) => {
+  console.log("garsh");
+  const page_name = req.params["pagename"];
+  const result = await userServices.pageQuery(page_name);
+  if (result === undefined || result === null) {
+    console.log("Yes");
+    res.status(404).send("Resource not found.");
+  } else {
+    res.status(200).send(result);
   }
-);
+});
 
 app.get(
   "/user/:user",
@@ -265,11 +261,11 @@ app.post("/user", async (req, res) => {
 
 app.post("/reviews", async (req, res) => {
   const review = req.body;
-  userServices.addReview(review).then((success) =>{
+  userServices.addReview(review).then((success) => {
     console.log("done adding review" + success);
     if (success) res.status(201).send(success);
     else res.status(500).end();
-  })
+  });
 });
 
 app.listen(process.env.PORT || port, () => {

@@ -98,7 +98,7 @@ async function getArtist(artist_name) {
 // PAGE FUNCTIONS
 // Returns name of all pages for a single user
 // Might not need this one
-async function getAllPages(username) {;
+async function getAllPages(username) {
   const pageModel = getDbConnection().model("Page", PageSchema);
   const result = await pageModel.find({ owner: username });
   return result;
@@ -134,8 +134,15 @@ async function addPage(page) {
 // Gets everypage in the collection that is similar to the given pagename
 async function pageQuery(pagename) {
   const pageModel = getDbConnection().model("Page", PageSchema);
-  const pages = await pageModel.find( { pageName: { $in: [new RegExp(pagename, "g"), 
-    new RegExp(pagename.toLowerCase(), "g"), new RegExp(pagename.toUpperCase(), "g")] } } );
+  const pages = await pageModel.find({
+    pageName: {
+      $in: [
+        new RegExp(pagename, "g"),
+        new RegExp(pagename.toLowerCase(), "g"),
+        new RegExp(pagename.toUpperCase(), "g"),
+      ],
+    },
+  });
   return pages;
 }
 
@@ -185,27 +192,27 @@ async function addReview(newReview) {
   try {
     const reviewToAdd = new reviewModel(newReview);
     const savedReview = await reviewToAdd.save();
-    userList = await findUserByUserName(newReview.owner)
+    userList = await findUserByUserName(newReview.owner);
     // findUserByUserName(newReview.owner).then((userList) => {
-      console.log("in call")
-      user = userList[0];
-      let revList = user.reviews;
-      if (!revList) {
-        revList = [];
-      }
-      revList.push(newReview);
-      user.reviews = revList;
-      result = await updateUser(user)
-      // updateUser(user).then((result) => {
-        console.log("done updating user");
-        return true;
-      // });
+    console.log("in call");
+    user = userList[0];
+    let revList = user.reviews;
+    if (!revList) {
+      revList = [];
+    }
+    revList.push(newReview);
+    user.reviews = revList;
+    result = await updateUser(user);
+    // updateUser(user).then((result) => {
+    console.log("done updating user");
+    return true;
+    // });
     // });
   } catch (error) {
     console.log("error caught" + error);
     return false;
   }
-  console.log("outside func")
+  console.log("outside func");
 }
 
 async function updateReview(updatedReview) {
