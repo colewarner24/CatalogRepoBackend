@@ -197,10 +197,19 @@ async function addReview(newReview) {
     console.log("in call");
     user = userList[0];
     let revList = user.reviews;
-    if (!revList) {
+    console.log(revList.array);
+    // If empty Push review
+    if (!revList || revList.length == 0) {
       revList = [];
+      revList.push(newReview);
     }
-    revList.push(newReview);
+    // Else check if review exists already
+    else {
+      revList.array.forEach((element) => {
+        if (element.reviewedItem === newReview.reviewedItem) return false;
+      });
+      revList.push(newReview);
+    }
     user.reviews = revList;
     result = await updateUser(user);
     // updateUser(user).then((result) => {

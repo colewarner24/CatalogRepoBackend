@@ -23,16 +23,24 @@ beforeAll(async () => {
   userServices.setConnection(conn);
 });
 
-test("Adding review and geting review", async () => {
+test("Adding review and getting review", async () => {
   const review = {
     owner: "Garsh",
     reviewedItem: "poop",
     rating: "3.5",
   };
 
+  const user = {
+    username: "Garsh",
+    password: "chiefkeeflive@theforum",
+  };
+
+  // Add User
+  console.log(await userServices.addUser(user));
+
   // Add review
   addedReview = await userServices.addReview(review);
-  expect(addedReview.owner).toBe(review.owner);
+  expect(addedReview).toBe(true);
 
   // Retrieve review
   gotReview = await userServices.getReview(review.owner, review.reviewedItem);
@@ -47,6 +55,14 @@ test("Adding duplicate review to same user", async () => {
     reviewedItem: "poop",
     rating: "3.5",
   };
+
+  const user = {
+    username: "Garsh",
+    password: "chiefkeeflive@theforum",
+  };
+
+  // Add User
+  console.log(await userServices.addUser(user));
 
   // add first time
   await userServices.addReview(review);
