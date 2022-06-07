@@ -21,8 +21,9 @@ app.use(express.json());
 /* Using this funcion as a "middleware" function for
   all the endpoints that need access control protecion */
 function authenticateUser(req, res, next) {
-  console.log("auth");
+  console.log(req.headers);
   const authHeader = req.headers["authorization"];
+  console.log(authHeader);
   //Getting the 2nd part of the auth hearder (the token)
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -200,9 +201,8 @@ app.get("/search/:pagename", async (req, res) => {
   }
 });
 
-app.get(
-  "/user/:user",
-  /*authenticateUser,*/ async (req, res) => {
+app.get("/user/:user",
+  authenticateUser, async (req, res) => {
     const user_name = req.params["user"];
     console.log("username");
     console.log(user_name);
@@ -240,6 +240,7 @@ app.get("/search/artist/:artist", async (req, res) => {
 app.get("/pages/:user", async (req, res) => {
   const username = req.params["user"];
   const result = await userServices.getAllPages(username);
+  console.log(result)
   if (result === undefined || result === null) {
     res.status(404).send("Not found");
   } else {
