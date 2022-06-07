@@ -20,13 +20,13 @@ To run this locally, all you need to do is download both repositories and run th
 
 Locally, the Front-end runs on port 3000, and the Back-end runs on port 5000.
 
-running Front-end Script
+Front-end command script
 
 ```md
 npm start
 ```
 
-running Back-end Script
+Back-end command script
 ```md
 npm run dev
 ```
