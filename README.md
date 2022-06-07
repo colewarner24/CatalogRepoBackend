@@ -46,6 +46,22 @@ CLIENT_SECRET= A User spotify Client Secret to connect to the spotify API
 
 TOKEN_SECRET = (A Token secret for the authentication of a password system. Could just be a randomly hashed number)
 
+
+## Setting Up Heroku Backend Environmental Variables
+
+Due to the backend requiring environmental variables, that also means for deployment of the backend, Config Vars are required for heroku.
+
+CLIENT_ID= A User spotify Client ID to connect to the spotify API
+
+CLIENT_SECRET= A User spotify Client Secret to connect to the spotify API
+
+MONGODB_URI= (A mongoDB URL for a connection ot the Database)
+
+TOKEN_SECRET = (A Token secret for the authentication of a password system. Could just be a randomly hashed number)
+
+***HEROKU_ENV_VAR = True***
+
+
 ## Installing Packages Used
 
 Use command
