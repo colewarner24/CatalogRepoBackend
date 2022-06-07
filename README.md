@@ -8,7 +8,7 @@ Catalog Product Spec: https://docs.google.com/document/d/19jHN31FKUMMZ6EW8DFhTgS
 
 Updated Product Spec: https://docs.google.com/document/d/1ogO4qJQe5q4V0Pby3Te-ghBrWuaUdyLSyqtJD5cvtKU/edit
 
-# Setting Up
+# Setting Up Backend Environmental Variables
 
 Environmental Variables used:
 
