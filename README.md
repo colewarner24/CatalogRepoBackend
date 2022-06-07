@@ -55,3 +55,24 @@ npm install
 ```
 
 On the terminal
+
+## Continuous Integration / Deployment
+
+We used heroku for our CI from this github repository. Connecting our CI requires editing our YML file and runnning the code below.
+
+```md
+npx prettier --write .
+```
+
+The CI requires prettier to be checked and ran before the continuing of our CI.
+
+In the -> Github\workflow\node.js.yml
+
+Edit the snippet below with your own heroku_app_name and heroku_email. (This is done by signing up on their website and obtaining the information after deploying a project)
+
+```
+with:
+    heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+    heroku_app_name: "heroku_app_name" #Must be unique on Heroku
+    heroku_email: "heroku_email" #Must be the one you used on Heroku
+```
