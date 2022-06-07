@@ -11,7 +11,7 @@ Updated Product Spec: https://docs.google.com/document/d/1ogO4qJQe5q4V0Pby3Te-gh
 ## Getting Started
 
 If you want to be able to replicate this project, then the instructions below should help.
- 
+
 Front-end: https://github.com/catalogTeam/CatalogRepoFE
 
 Back-end: https://github.com/colewarner24/CatalogRepoBackend
@@ -27,6 +27,7 @@ npm start
 ```
 
 Back-end command script
+
 ```md
 npm run dev
 ```
@@ -45,7 +46,7 @@ TOKEN_SECRET = (A Token secret for the authentication of a password system. Coul
 
 ## Installing Packages Used
 
-Use command 
+Use command
 
 We used a ton of packages, so best way to install it is to just use the command
 
