@@ -61,7 +61,7 @@ MONGODB_URI= (A mongoDB URL for a connection ot the Database)
 
 TOKEN_SECRET = (A Token secret for the authentication of a password system. Could just be a randomly hashed number)
 
-***HEROKU_ENV_VAR = true***
+HEROKU_ENV_VAR = true
 ```
 
 ## Installing Packages Used
