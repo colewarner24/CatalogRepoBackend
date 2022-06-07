@@ -7,3 +7,10 @@ Developed with NODE js, Express, MongoDB, and calls to the SpotifyAPI
 Catalog Product Spec: https://docs.google.com/document/d/19jHN31FKUMMZ6EW8DFhTgSvYol8LVn-j9hdNSQfbLMQ/edit?usp=sharing
 
 Updated Product Spec: https://docs.google.com/document/d/1ogO4qJQe5q4V0Pby3Te-ghBrWuaUdyLSyqtJD5cvtKU/edit
+
+# Setting Up
+Environmental Variables used:
+MONGODB_URI= (A mongoDB URL for a connection ot the Database)
+CLIENT_ID= A User spotify Client ID to connect to the spotify API
+CLIENT_SECRET= A User spotify Client Secret to connect to the spotify API
+TOKEN_SECRET = (A Token secret for the authentication of a password system. Could just be a randomly hashed number)
