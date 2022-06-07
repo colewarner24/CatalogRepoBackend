@@ -14,7 +14,7 @@ If you want to be able to replicate this project, then the instructions below sh
  
 Front-end: https://github.com/catalogTeam/CatalogRepoFE
 
-Back-end: This repository.
+Back-end: https://github.com/colewarner24/CatalogRepoBackend
 
 To run this locally, all you need to do is download both repositories and run them individually.
 
