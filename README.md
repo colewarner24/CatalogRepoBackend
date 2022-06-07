@@ -19,3 +19,11 @@ CLIENT_ID= A User spotify Client ID to connect to the spotify API
 CLIENT_SECRET= A User spotify Client Secret to connect to the spotify API
 
 TOKEN_SECRET = (A Token secret for the authentication of a password system. Could just be a randomly hashed number)
+
+## Installing Packages Used
+
+Use command 
+
+```md
+!npm install
+```
