@@ -1,6 +1,6 @@
 ﻿![example workflow](https://github.com/catalogTeam/CatalogRepoFE/actions/workflows/node.js.yml/badge.svg)
 
-# CatalogRepoBackend
+# Catalog Repository Backend
 
 Developed with NODE js, Express, MongoDB, and calls to the SpotifyAPI
 
