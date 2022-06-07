@@ -24,6 +24,9 @@ TOKEN_SECRET = (A Token secret for the authentication of a password system. Coul
 
 Use command 
 
+We used a ton of packages, so best way to install it is to just use the command
+
 ```md
-!npm install
+npm install
 ```
+On the terminal
