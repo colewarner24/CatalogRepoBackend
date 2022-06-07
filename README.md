@@ -8,7 +8,30 @@ Catalog Product Spec: https://docs.google.com/document/d/19jHN31FKUMMZ6EW8DFhTgS
 
 Updated Product Spec: https://docs.google.com/document/d/1ogO4qJQe5q4V0Pby3Te-ghBrWuaUdyLSyqtJD5cvtKU/edit
 
-# Setting Up Backend Environmental Variables
+## Getting Started
+
+If you want to be able to replicate this project, then the instructions below should help.
+ 
+Front-end: https://github.com/catalogTeam/CatalogRepoFE
+
+Back-end: This repository.
+
+To run this locally, all you need to do is download both repositories and run them individually.
+
+Locally, the Front-end runs on port 3000, and the Back-end runs on port 5000.
+
+running Front-end Script
+
+```md
+npm start
+```
+
+running Back-end Script
+```md
+npm run dev
+```
+
+## Setting Up Backend Environmental Variables
 
 Environmental Variables used:
 
@@ -29,4 +52,5 @@ We used a ton of packages, so best way to install it is to just use the command
 ```md
 npm install
 ```
+
 On the terminal
